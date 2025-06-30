@@ -85,8 +85,8 @@ The figure below shows the comparison between predicted flame states and ground 
 The prediction accuracy is annotated directly on the plot.
 
 <div align="center">
-  <img src="runs/inference-cls/exp6/0313_final_plot.png" width="45%" />
-  <img src="runs/inference-cls/exp6/1119_final_plot.png" width="45%" />
+  <img src="0313_final_plot.png" width="45%" />
+  <img src="1119_final_plot.png" width="45%" />
 </div>
 
 <p align="center">
