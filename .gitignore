@@ -1,0 +1,43 @@
+# === Compilation & Python cache ===
+__pycache__/
+*.pyc
+*.so
+
+# === Dataset (ignore all except specific folders) ===
+datasets/
+!datasets/test/
+!datasets/train/
+!datasets/valid/
+hengqin_inference_cls/
+
+# === logs ===
+runs/*
+
+# === Ignore all in utils except selected files ===
+utils/
+!utils/dataLoader.py
+!utils/dataProcess.py
+!utils/loss.py
+!utils/plots.py
+!utils/scaler_data.py
+!utils/torch_utils.py
+!utils/general.py
+
+README_*.md
+# === Model artifacts ===
+*.pth
+*.npy
+*.npz
+
+# === Notebooks ===
+*.ipynb
+
+# === Editor temporary files ===
+*.swn
+*.swo
+*.swp
+*~
+
+# === Pycharm settings ===
+.idea/
+.DS_Store
