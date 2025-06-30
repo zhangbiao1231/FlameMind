@@ -11,7 +11,8 @@ datasets/
 hengqin_inference_cls/
 
 # === logs ===
-runs/*
+runs/
+!runs/exp6/*.png
 
 # === Ignore all in utils except selected files ===
 utils/
