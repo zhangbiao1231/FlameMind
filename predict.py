@@ -222,12 +222,12 @@ def run(
 def parse_opt():
     """Parses command line arguments for YOLOv5 inference settings including model, source, device, and image size."""
     parser = argparse.ArgumentParser()
-    parser.add_argument("--source", type=str, default=ROOT / "datasets/test",
+    parser.add_argument("--source", type=str, default=ROOT / "datasets/test-hengqin",
                         help="dataset path")
     # parser.add_argument("--model", type=str, default=None, help="initial weights path")
-    parser.add_argument("--weights", nargs="+", type=str, default=ROOT / "runs/train-cls/exp18/weights/best.pt",
+    parser.add_argument("--weights", nargs="+", type=str, default=ROOT / "runs/train-cls-hengqin/exp/weights/best.pt",
                         help="model.pt path(s)")
-    parser.add_argument("--project", default=ROOT / "runs/inference-cls", help="save to project/name")
+    parser.add_argument("--project", default=ROOT / "runs/inference-cls-hengqin", help="save to project/name")
     parser.add_argument("--name", default="exp", help="save to project/name")
     parser.add_argument("--exist-ok", action="store_true", help="existing project/name ok, do not increment")
     parser.add_argument("--half", action="store_true", help="use FP16 half-precision inference")

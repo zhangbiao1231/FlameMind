@@ -2,28 +2,36 @@
 __pycache__/
 *.pyc
 *.so
+!*.png
 
 # === Dataset (ignore all except specific folders) ===
 datasets/
 !datasets/test/
-!datasets/train/
 !datasets/valid/
-hengqin_inference_cls/
+!datasets/test_hengqin/
+!datasets/valid_hengqin/
 
 # === logs ===
 runs/*
+!runs/train-cls/exp18/weights/*
+!runs/train-cls-hengqin/exp/weights/*
+!runs/train-cls-hengqin/exp2/weights/*
 
 # === Ignore all in utils except selected files ===
 utils/
 !utils/dataLoader.py
 !utils/dataProcess.py
+!utils/general.py
+!utils/inference.py
 !utils/loss.py
+!utils/modelLoader.py.py
 !utils/plots.py
+!utils/reorg.py.py
 !utils/scaler_data.py
 !utils/torch_utils.py
-!utils/general.py
 
-README_*.md
+
+*.gitignore
 # === Model artifacts ===
 *.pth
 *.npy

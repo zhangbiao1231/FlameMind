@@ -43,7 +43,7 @@ from utils.general import try_gpu
 def run(
         data="",  # dataset dir
         weights="",  # model.pt path(s)
-        project=ROOT / "runs/val-cls",   # save to project/name
+        project=ROOT / "runs/val-cls-hengqin",   # save to project/name
         name="exp",  # save to project/name
         exist_ok=False,  # existing project/name ok, do not increment
         half=False,  # use FP16 half-precision inference
@@ -74,7 +74,7 @@ def run(
         LOGGER.info(f"Loaded full model from {weights}") # report
 
         # Dataloader
-        valid_dir = Path(data) / "valid" # datasets/valid
+        valid_dir = Path(data) / "valid_hengqin" # datasets/valid
         valid_features, valid_labels,_ = concat_data(data_folder=valid_dir, use_random=False)
         dataloader = SeqDataLoader(
             valid_features,
@@ -121,9 +121,9 @@ def parse_opt():
     parser.add_argument("--data", type=str, default=ROOT / "datasets",
                         help="dataset path")
     # parser.add_argument("--model", type=str, default=None, help="initial weights path")
-    parser.add_argument("--weights", nargs="+", type=str, default=ROOT / "runs/train-cls/exp18/weights/best.pt",
+    parser.add_argument("--weights", nargs="+", type=str, default=ROOT / "runs/train-cls-hengqin/exp/weights/best.pt",
                         help="model.pt path(s)")
-    parser.add_argument("--project", default=ROOT / "runs/val-cls", help="save to project/name")
+    parser.add_argument("--project", default=ROOT / "runs/val-cls-hengqin", help="save to project/name")
     parser.add_argument("--name", default="exp", help="save to project/name")
     parser.add_argument("--exist-ok", action="store_true", help="existing project/name ok, do not increment")
     parser.add_argument("--half", action="store_true", help="use FP16 half-precision inference")

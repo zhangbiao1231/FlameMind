@@ -90,7 +90,7 @@ def train(opt,device):
     writer = SummaryWriter(log_dir=str(save_dir))
 
     # Dataloaders
-    train_dir = DATASETS_DIR / "train"
+    train_dir = DATASETS_DIR / "train_hengqin"
     train_features, train_labels ,scaler= concat_data(data_folder=train_dir, use_random=False)
 
     import pickle
@@ -105,7 +105,7 @@ def train(opt,device):
         use_random_iter=True,
     )
 
-    valid_dir = DATASETS_DIR / "valid"
+    valid_dir = DATASETS_DIR / "valid_hengqin"
     if RANK in {-1, 0}:
         valid_features, valid_labels,_ = concat_data(data_folder=valid_dir, use_random=False)
         validloader = SeqDataLoader(
@@ -262,6 +262,11 @@ def train(opt,device):
                     "scaler": scaler_bytes}
                 # Save last, best and delete
                 torch.save(ckpt, last)
+                # TODO 解决报错：
+                #  torch.jit.frontend.NotSupportedError:
+                #  Compiled functions can't take variable number of arguments or use keyword-only arguments with defaults
+                # model_scripted = torch.jit.script(model)
+                # model_scripted.save(wdir)
                 if best_fitness == fitness:
                     torch.save(ckpt, best)
                 if opt.save_period > 0 and epoch % opt.save_period == 0:
@@ -307,7 +312,7 @@ def parse_opt(known=False):
     parser.add_argument("--cache", type=str, nargs="?", const="ram", help='--cache images in "ram" (default) or "disk"')
     parser.add_argument("--device", default="", help="cuda device, i.e. 0 or 0,1,2,3 or cpu")
     parser.add_argument("--workers", type=int, default=8, help="max dataloader workers (per RANK in DDP mode)")
-    parser.add_argument("--project", default=ROOT / "runs/train-cls", help="save to project/name")
+    parser.add_argument("--project", default=ROOT / "runs/train-cls-hengqin", help="save to project/name")
     parser.add_argument("--name", default="exp", help="save to project/name")
     parser.add_argument("--exist-ok", action="store_true", help="existing project/name ok, do not increment")
     parser.add_argument("--pretrained", nargs="?", const=True, default=False, help="start from i.e. --pretrained False")

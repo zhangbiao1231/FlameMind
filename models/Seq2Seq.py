@@ -87,7 +87,6 @@ class Seq2SeqAttentionDecoder(AttentionDecoder):
 
         outputs, self._attention_weights = [], []
         for x in X:
-
             query = torch.unsqueeze(hidden_state[-1], dim=1)  # (32, 1, 32)
             context = self.attention(
                 queries=query,
