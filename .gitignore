@@ -30,7 +30,7 @@ utils/*
 !utils/scaler_data.py
 !utils/torch_utils.py
 
-!README_2.md
+README_2.md
 .gitignore
 # === Model artifacts ===
 *.pth
