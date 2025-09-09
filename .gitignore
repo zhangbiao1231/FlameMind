@@ -18,7 +18,7 @@ runs/*
 !runs/train-cls-hengqin/exp2/weights/*
 
 # === Ignore all in utils except selected files ===
-utils/
+utils/*
 !utils/dataLoader.py
 !utils/dataProcess.py
 !utils/general.py
@@ -31,7 +31,7 @@ utils/
 !utils/torch_utils.py
 
 !README_2.md
-*.gitignore
+.gitignore
 # === Model artifacts ===
 *.pth
 *.npy
