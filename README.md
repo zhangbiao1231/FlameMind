@@ -79,39 +79,37 @@ FlameMind/
 ---
 ### 📁 1. Raw Data Overview
 - **Source**: Logged sensor data from gas turbine testbed (or simulation outputs)  
-- **Sampling Rate**: 1 min (or project-specific)  
+- **Sampling Rate**: 1 second (or project-specific)  
 - **Features (base)**:
-  - `load`, `diffusion_valve_feedback`, `exhaust_temp`, 
-  - `compressor_inlet_temp`, `turbine_exhaust_temp_10B`, 
-  - `amb_temperature`,`NG_inlet_temp`, `exhaust_temp`, etc.
+  - `Voted Speed`, `Exhaust Temp`, `Compressor Temperature`, 
+  - `LoLo Band Peak Amplitude`, `Low Band Peak Amplitude`, 
+  - `Mid Band Peak Amplitude`,`Hi Band Peak Amplitude`,
+  - `Screech Band Peak Amplitude`,`Transverse Band Peak Amplitude`, etc.
 - **Labels**:
-  - `NOx_in_flue_gas` (i.e. NOx)
+  - `Flame Intensity` (i.e. NOx)
 - **Size**:
   - N test runs × T time steps × D input features
 
-> _Note: Missing values interpolated; outliers removed using IQR filtering._
+> _Note: Missing values interpolated;outliers removed using IQR filtering._
 ---
 ### 🧹 2. Data Preprocessing
 - **Cleaning**:
   - Remove Nulls and duplicates
   - Clip or mask physically invalid values (e.g., NOx < 0.0 ppm)
 - **Normalization**:
-  - Per-feature Min-Max scaling or StandardScaler
-- **Segmentation**:
-  - Split with `time_col=Time`, `freq = 1min`
+  - Per-feature StandardScaler scaling or StandardScaler
 - **Label Strategy**:
-  - Predict next-step emission level (regression)
+  - Predict next-step emission level (classification)
   - Optional: multi-step average prediction
 - **Feature Engineering**:
-  - valve_share, etc.
-  - $\Delta$T, $\Delta$P,
-  - Rolling statistics (e.g., mean, std, gradient)
-
+  - $\Delta$T 
+  - normalize different band psi
+  - Set threshold to transform intensity to 0/1
 ---
 ### 🧠 3. Model Architecture
-- **Base Model**: GRU-based sequence regression
+- **Base Model**: GRU-based sequence classification
 - **Input Format**: `[batch_size, num-steps, num_features]`
-- **Architecture**:``` Input → GRU → FC → Digital Prediction```
+- **Architecture**:``` Input →GRU encoder →GRU decoder →FC →Flame Prediction```
 - **Variants to Explore**:
   - GRU, LSTM, or RNN
   - Temporal Convolutional Network (TCN)
@@ -122,16 +120,19 @@ FlameMind/
 | Parameter           | Value                             |
 |---------------------|-----------------------------------|
 | Batch Size          | 32                                |
-| Number Steps        | 10/20/30                          |
-| Number Hiddens      | 32/64/96                          |
+| Number Steps        | 10                                |
+| Number Hiddens      | 32                                |
 | RNN Layers          | 2                                 |
+| Embedding Size      | 8                                 |
+| Encoder Model       | GRU/LSTM/RNN                      |
+| Decoder Model       | GRU/LSTM/RNN                      |
 | Dropout             | 0.5                               |
 | Optimizer           | Adam                              |
-| Learning Rate       | 1e-3                              |
-| Epochs              | 1000                              |
-| Loss Function       | MSE (per output)                  |
+| Learning Rate       | 1e-5                              |
+| Epochs              | 600                               |
+| Loss Function       | CrossEntropyLoss (per output)     |
 | Early Stopping      | Patience = 20                     |
-| Learning Rate Decay | StepLR(lr_period=50,lr_decay=0.9) |
+| Learning Rate Decay | StepLR(lr_period=20,lr_decay=0.9) |
 
 > _All training runs are logged under `runs/`, including checkpoints and loss/metric plots._
 
@@ -175,23 +176,22 @@ different weights (i.e. raw/pretrain/train)Accuracy: <b>59.42%</b> 、<b>67.76%<
 ## 🌈 Conclusion
 
 ------------------------
-- In this work, we used limited sensor data and carefully engineered derived 
-features to establish a reliable dataset for emission prediction. 
-Based on this foundation, we trained an efficient prediction system that performs 
-well on both validation and test datasets. The model accurately captures emission 
-trends with promising metrics and low inference latency(<0.5 ms), making it suitable for
-real-time deployment in operation and maintenance diagnostic systems.
+- Using limited sensor data and carefully engineered features, we established a solid 
+data foundation for flame prediction. On top of this, we trained an efficient flame 
+prediction system that performs exceptionally well on both validation and test sets. 
+The system is able to accurately capture flame states, achieves strong 
+metrics, and maintains short inference delay(_<1ms_), making it suitable for 
+deployment in real-time operation and maintenance diagnostic systems.
 
-- Through extensive experiments with different hyperparameters and 
-neural network architectures, we identified [GRU]() as the most effective model. 
-The optimal configuration — with [num_steps=20]() and [num_hiddens=64]() — achieved 
-the best performance, reaching an [Acc >= 0.99]() at valid datasets.
-These results provide a $solid baseline$ for future fine-tuning and improvements.
+- We explored a variety of hyperparameters and neural network architectures. 
+After extensive experiments, we identified the optimal setup 
+as a [GRU encoder–decoder]() architecture with [num-steps = 10]() and 
+[num-hiddens = 32](), achieving [Acc ≥ 0.99](). These results provide
+a $strong$ foundation for further fine-tuning and future improvements.
 
-- We hope this work can contribute to the development of gas turbine emission prediction. 
+- We hope this work can contribute to the development of virtual flame detection for gas turbine. 
 If you have better ideas or suggestions, we welcome collaboration and discussion.
 
-  
 ## 📃 Citing
 
 ---
@@ -206,7 +206,6 @@ If you have better ideas or suggestions, we welcome collaboration and discussion
   publisher={2025}
 }
 ```
-
 ##  📬 Contact
 
 ---
